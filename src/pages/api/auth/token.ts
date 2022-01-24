@@ -1,6 +1,6 @@
 import { RefreshTokenAttribute } from "./../../../types/refresh-token-attribute";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { authModel } from "../../../models/auth.model";
+import { authModel } from "../../../services/modules/auth";
 
 type Data = {
   success?: boolean;

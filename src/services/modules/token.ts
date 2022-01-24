@@ -1,5 +1,5 @@
-import { RefreshTokenAttribute } from "../types";
-import executeQuery from "../utils/db";
+import { RefreshTokenAttribute } from "../../types";
+import executeQuery from "../../utils/db/db";
 
 const saveRefreshToken = async ({
   token,

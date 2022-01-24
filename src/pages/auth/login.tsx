@@ -3,6 +3,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import Router from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+import { authLogin, UserState } from "../../redux/slices/user-slice";
+import { RootState } from "../../redux/store";
 
 type Props = {
   user: User;
@@ -29,6 +32,10 @@ interface UserAttributes {
 }
 
 const Login: NextPage = () => {
+  const { user, isLoggedIn }: UserState = useSelector(
+    (state: RootState) => state.user
+  );
+
   const userInput: UserAttributes = {
     username: "",
     password: "",
@@ -38,16 +45,51 @@ const Login: NextPage = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
 
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      Router.push("/dashboard");
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (showAlert) {
+      let timer1 = setTimeout(() => setShowAlert(false), 2000);
+      return () => {
+        clearTimeout(timer1);
+      };
+    }
+  }, [showAlert]);
+
+  // useEffect(() => {
+  //   if (user.status !== null) {
+  //     const firstWord = user.status.split("_")[0].toLowerCase();
+  //     console.log(user.status);
+  //     if (firstWord === "success") {
+  //       setAlertMessage("Login Success!");
+  //       setShowAlert(true);
+  //     } else if (firstWord === "error") {
+  //       setAlertMessage("Login Failed!");
+  //       setShowAlert(true);
+  //     }
+  //   }
+  // }, [user.status]);
+
+  const login = (userLogin: UserAttributes) => {
+    dispatch(authLogin(userLogin));
+  };
+
   return (
     <div>
       <div className={`flex flex-row md:h-screen`}>
-        <div className="hidden md:flex w-1/2 flex-col bg-gray-600"></div>
+        <div className="hidden md:flex w-1/2 flex-col bg-sky-600"></div>
         <div className="flex overflow-y-auto w-full md:w-1/2 flex-col xl:px-40 md:px-24 px-4 md:py-12 py-8">
-          <div className="flex justify-end items-center md:py-4">
-            <Link href={`/homepage`}>
+          {/* <div className="flex justify-end items-center md:py-4">
+            <Link href={`/`}>
               <a className={`text-base`}>Home</a>
             </Link>
-          </div>
+          </div> */}
           <form
             className={`flex flex-col flex-grow justify-center pt-8 md:pt-0"`}
           >
@@ -105,11 +147,14 @@ const Login: NextPage = () => {
                 type="submit"
                 onClick={(event) => {
                   event.preventDefault();
-                  // login(userLogin);
+                  console.log(userLogin);
+                  login(userLogin);
                 }}
               >
-                <div className="py-1 bg-gray-500 w-full">
-                  <p className={`text-white text-base p-4 text-center`}>
+                <div className="py-1 bg-white w-full rounded border-2 border-sky-600 hover:bg-sky-600">
+                  <p
+                    className={`text-sky-600 text-base p-4 text-center font-semibold hover:text-white`}
+                  >
                     Login
                   </p>
                 </div>
@@ -120,7 +165,7 @@ const Login: NextPage = () => {
               <p className="text-sm text-gray-400 pb-2">
                 Didn’t have an account?
               </p>
-              <Link href={`/register`}>
+              <Link href={`/auth/register`}>
                 <a className="text-sm text-black">Register</a>
               </Link>
             </div>

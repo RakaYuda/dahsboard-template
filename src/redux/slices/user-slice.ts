@@ -2,10 +2,10 @@
 // import { Product } from "./../../types/product";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { UserLoginAttribute, UserRegisterAttribute } from "../../types";
+import { client } from "../../utils/api/client";
 // import { client } from "../../helpers/api/client";
-import { CartProduct } from "../../types/cart-product";
 
-const urlBaseApi = "https://marked-api-development.herokuapp.com";
+const urlBaseApi = "http://localhost:3000";
 
 interface User {
   username: string | null;
@@ -17,7 +17,6 @@ export interface UserState {
   user: User;
   isLoggedIn: boolean;
   token: string;
-  cart: CartProduct[];
 }
 
 const initialState = {
@@ -27,15 +26,13 @@ const initialState = {
     status: "",
   },
   isLoggedIn: false,
-  // refreshToken: ""
   token: "",
-  cart: [],
 } as UserState;
 
 export const authLogin = createAsyncThunk<User, UserLoginAttribute>(
   "user/authLogin",
   async (user) => {
-    const path = "/api/auth/signin";
+    const path = "/api/auth/login";
     const url = urlBaseApi + path;
     const { username, password } = user;
     const response = await client.post(url, {
@@ -64,71 +61,7 @@ export const authRegister = createAsyncThunk<User, UserRegisterAttribute>(
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {
-    // addProductToUserCart(state, { payload }: PayloadAction<Product>) {
-    //   const product = payload;
-    //   const { id } = product;
-    //   const existingProduct = state.cart.find((product) => product.id === id);
-    //   if (!existingProduct) {
-    //     const newProduct = {
-    //       ...product,
-    //       ["quantity"]: 1,
-    //     };
-    //     state.cart = [...state.cart, newProduct];
-    //   } else {
-    //     const newProduct = {
-    //       ...existingProduct,
-    //       ["quantity"]: existingProduct.quantity + 1,
-    //     };
-    //     const newCart = state.cart.map(function (item) {
-    //       return item.id === existingProduct.id ? newProduct : item;
-    //     });
-    //     state.cart = [...newCart];
-    //   }
-    // },
-    // addQuantityCartProduct(state, { payload }: PayloadAction<Product>) {
-    //   const product = payload;
-    //   const { id } = product;
-    //   const existingProduct = state.cart.find((product) => product.id === id);
-    //   if (existingProduct) {
-    //     const newProduct = {
-    //       ...existingProduct,
-    //       ["quantity"]: existingProduct.quantity + 1,
-    //     };
-    //     const newCart = state.cart.map(function (item) {
-    //       return item.id === existingProduct.id ? newProduct : item;
-    //     });
-    //     state.cart = [...newCart];
-    //   }
-    // },
-    // reduceQuantityCartProduct(state, { payload }: PayloadAction<Product>) {
-    //   const product = payload;
-    //   const { id } = product;
-    //   const existingProduct = state.cart.find((product) => product.id === id);
-    //   if (existingProduct) {
-    //     if (existingProduct.quantity > 1) {
-    //       const newProduct = {
-    //         ...existingProduct,
-    //         ["quantity"]: existingProduct!.quantity - 1,
-    //       };
-    //       const newCart = state.cart.map(function (item) {
-    //         return item.id === existingProduct.id ? newProduct : item;
-    //       });
-    //       state.cart = [...newCart];
-    //     }
-    //   }
-    // },
-    // removeCartProduct(state, { payload }: PayloadAction<Product>) {
-    //   const product = payload;
-    //   const { id } = product;
-    //   const leftProduct = state.cart.filter((product) => product.id !== id);
-    //   state.cart = [...leftProduct];
-    //   console.log(leftProduct);
-    // },
-    // removeAllCartProduct(state) {
-    //   state.cart = [...initialState.cart];
-    // },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(authLogin.pending, (state, action) => {
@@ -186,13 +119,5 @@ const userSlice = createSlice({
       });
   },
 });
-
-// export const {
-//   addProductToUserCart,
-//   addQuantityCartProduct,
-//   reduceQuantityCartProduct,
-//   removeCartProduct,
-//   removeAllCartProduct,
-// } = userSlice.actions;
 
 export default userSlice.reducer;

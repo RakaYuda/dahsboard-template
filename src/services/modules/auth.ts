@@ -2,14 +2,14 @@ import {
   RefreshTokenAttribute,
   UserLoginAttribute,
   UserRegisterAttribute,
-} from "../types";
+} from "../../types";
 
 import { v4 as uuidv4 } from "uuid";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
-import executeQuery from "../utils/db";
-import { tokenModel } from "./token.model";
+import executeQuery from "../../utils/db/db";
+import { tokenModel } from "./token";
 
 const config = {
   jwtExpiration: 60, // 1 minute

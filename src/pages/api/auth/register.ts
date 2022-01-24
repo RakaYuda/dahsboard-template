@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { authModel } from "../../../models/auth.model";
+import { authModel } from "../../../services/modules/auth";
 
 type Data = {
   username?: string;

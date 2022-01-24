@@ -36,14 +36,14 @@ function MainTable() {
   //     []
   //   );
 
-  return (
-    <DataTable
-      title="Movie List"
-      columns={columns}
-      data={data}
-      actions={actionsMemo}
-    />
-  );
+  //   return (
+  //     <DataTable
+  //       title="Movie List"
+  //       columns={columns}
+  //       data={data}
+  //       actions={actionsMemo}
+  //     />
+  //   );
   return (
     <DataTable
       columns={columns}
